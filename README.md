@@ -9,14 +9,20 @@ For now with unfinished documentations, look into examples to see how to use fun
 
 
 Ammount of clock cycles different resolutions take up:
+
 16bits - 10
+
 14bits - 9
+
 12bits - 8
+
 10bits - 7
+
 8bits  - 6
 
 
 Function descriptions - 
+
 ADCInterleaved - Starts both adc so they meassure one channel, in which they take turns, allows for double the speed of using just one channel, but the two channels dont tend to be perfectly calibrated
 
 ADCSimultaneous - Starts both ADCs so they read two different channels exactly in phase
