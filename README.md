@@ -14,7 +14,10 @@ Ammount of clock cycles different resolutions take up:
 
 Function descriptions - 
 ADCInterleaved - Starts both adc so they meassure one channel, in which they take turns, allows for double the speed of using just one channel, but the two channels dont tend to be perfectly calibrated
+
 ADCSimultaneous - Starts both ADCs so they read two different channels exactly in phase
 ADC1/2Begin - Start one of the ADCs
+
 CatchADC1/2Value - writes down the ADC value from latest conversion, and if it was already read, waits for next conversion to happen
+
 OPAMPCFG - starts the operational amplifier, only supported when using Giga R1 Wifi.
