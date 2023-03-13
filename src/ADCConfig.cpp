@@ -53,12 +53,13 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   /***************ADC not Enabled yet********************/
 
-  CLEAR_BIT(ADC1->CR, ADC_CR_DEEPPWD);
+  CLEAR_BIT(ADC1->CR, ADC_CR_DEEPPWD);     //Wake up from deep sleep
 
   SET_BIT(ADC1->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
 
 
-  AdcChannel=ADC1PinRemap(AdcChannel);
+  AdcChannel=ADC1PinRemap(AdcChannel);     //Get actual channel number
+  
   //ADC CALIBRATION-----------------------------------
 
   if(Differential) {
@@ -68,12 +69,14 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   SET_BIT(ADC1->CR, ADC_CR_ADCAL);
   while (READ_REG(ADC1->CR & ADC_CR_ADCAL)) {};
 
-  SET_BIT(ADC1->CFGR2, ADC_CFGR2_ROVSE);
+  
+  SET_BIT(ADC1->CFGR2, ADC_CFGR2_ROVSE); //Set oversampling
 
-  ADC1->CFGR2 += 65536 * Samplenum;
+  
+  ADC1->CFGR2 += 65536 * Samplenum; //Set number of samples
 
 
-
+  //Select channel
 
   if (Differential) {
 
@@ -90,21 +93,21 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   };
 
 
-  //SET_BIT(ADC1->CR, ADC_CR_BOOST);  //Boost to ensure ADC runs fast enough
 
 
-  ADC1->DIFSEL = 1048575 * Differential;  //Diffmode?
+
+  ADC1->DIFSEL = 1048575 * Differential;  //Diffmode
 
 
 
   SET_BIT(ADC1->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk);  //Enable Continuous mode, Always overwrite data
 
-  ResolutionSet(Resolution);  //Set RESOLUTION
+  ResolutionSet(Resolution);  //Set resolution
 
 
 
-  ADC1->SMPR1 = SampleTime * 153391689;  //Divide
-  ADC1->SMPR2 = SampleTime * 153391689;  //Divide
+  ADC1->SMPR1 = SampleTime * 153391689;  //Set sampletime
+  ADC1->SMPR2 = SampleTime * 153391689;  //Set sampletime
 
 
 
@@ -297,16 +300,16 @@ void ResolutionSet(int Resolution) {
 void SystemCLCKInit(double ClockSpeedMHZ) {
 
 #if defined(ARDUINO_GIGA)
-  RCC->PLLCKSELR = 0x0200F022;
+  RCC->PLLCKSELR = 0x0200F022; //Divide 16mhz clock to 1
 #elif defined(STM32H747xx)
-  RCC->PLLCKSELR = 0x02017022;
+  RCC->PLLCKSELR = 0x02017022; //Divide 24mhz clock to 1
 #else
   #error Unsupported microcontroller, this library currently only works for STM32H747 based arduino boards.
 #endif
-int AdcPrescDivision = 1;
-ClockSpeedMHZ *= 2;
+int AdcPrescDivision = 1; //How much does clock get divided
+ClockSpeedMHZ *= 2; //ADC always further divides clockspeed by 2, compensate
 
-//1.2
+//Calculate proper prescaler if needed
 
 if(128<1.2/ClockSpeedMHZ) {
 AdcPrescDivision = 256;
@@ -343,26 +346,29 @@ AdcPrescDivision = 2;
 Prescaler = 1;
 };
 
+  //Calculate dividor to use
 
   int dividor = ceil(150.0f / ClockSpeedMHZ / AdcPrescDivision);
   if (dividor>128) {
 dividor = 128;
   };
 
-
-
+  //Set generator speed, remain in 150-300mhz range as long as possible
+  
   RCC->PLL2DIVR = 0x01010000;  //Sets the generator speed
   RCC->PLL2DIVR += dividor*512-512;
   RCC->PLL2DIVR += ceil(ClockSpeedMHZ*dividor*AdcPrescDivision-4);  //Sets the generator speed
 
-  SET_BIT(RCC->CR, RCC_CR_PLL2ON);
-  SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_DIVP2EN);  //Enables
+  SET_BIT(RCC->CR, RCC_CR_PLL2ON); //Enable generator
+  SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_DIVP2EN);  //Enable output
 
 
-  SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_ADC12EN_Msk);  //Enable peripherals
-  SET_BIT(RCC->AHB4ENR, RCC_AHB4ENR_GPIOAEN | RCC_AHB4ENR_GPIOBEN | RCC_AHB4ENR_GPIOCEN);
+  SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_ADC12EN_Msk);  //Enable ADC
+  SET_BIT(RCC->AHB4ENR, RCC_AHB4ENR_GPIOAEN | RCC_AHB4ENR_GPIOBEN | RCC_AHB4ENR_GPIOCEN); //Enable GPIOs
 
  
+//Set boost mode so ADC can run faster
+  
 if (ClockSpeedMHZ>50) {
   SET_BIT(ADC1->CR, ADC_CR_BOOST);
   SET_BIT(ADC2->CR, ADC_CR_BOOST);
@@ -374,7 +380,7 @@ if (ClockSpeedMHZ>50) {
   SET_BIT(ADC2->CR, ADC_CR_BOOST_0);
 }
 
-  delay(100);
+  delay(100); //Make sure changes got applied
 }
 
 
@@ -383,15 +389,15 @@ if (ClockSpeedMHZ>50) {
 
 int CatchADC1Value() {
 
-  while (!READ_REG(ADC1->ISR & ADC_ISR_EOC)) {};
-return(READ_REG(ADC1->DR));
+  while (!READ_REG(ADC1->ISR & ADC_ISR_EOC)) {}; //Wait for a new value if the latest one was already read
+return(READ_REG(ADC1->DR)); //Return the new value
 
 }
 
 int CatchADC2Value() {
 
-  while (!READ_REG(ADC2->ISR & ADC_ISR_EOC)) {};
-return(READ_REG(ADC2->DR));
+  while (!READ_REG(ADC2->ISR & ADC_ISR_EOC)) {}; //Wait for a new value if the latest one was already read
+return(READ_REG(ADC2->DR)); //Return the new value
 
 }
 
