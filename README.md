@@ -1,4 +1,4 @@
-Compatible with Giga R1 wifi, Portenta h7 and possibly other stm32h747 boards. You can find the list of supported pins on GIGAR1 in pinmappings.h file in src.
+Compatible with Giga R1 wifi, Portenta h7 and possibly other stm32h747 boards. You can find the list of supported pins on GIGAR1 in pinmappings.cpp file in src.
 
 As of now this library is still in development, as well as its doccumentation. The planned features can be found in Issues.
 
