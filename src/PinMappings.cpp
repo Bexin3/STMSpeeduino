@@ -22,7 +22,7 @@ int ADC1PinRemap(int Pin) {
     case 66: return (17);
     case DAC_0: return (18);
     case DAC_1: return (19);
-  default: return(0);
+  default: return(-1);
   };
 }
 
@@ -44,7 +44,7 @@ int ADC2PinRemap(int Pin) {
     case 2: return (15);
     case DAC_0: return (18);
     case DAC_1: return (19);
-  default: return(0);
+  default: return(-1);
   };
 }
 
@@ -56,7 +56,7 @@ int ADC3PinRemap(int Pin) {
     case 73: return (11);
     case A5: return (12);
     case 21: return (15);
-  default: return(0);
+  default: return(-1);
   };
 }
 
