@@ -268,6 +268,17 @@ void ADC2_Start() {
 }
 
 
+void ADC2_Stop() {
+  
+  SET_BIT(ADC2->CR, ADC_CR_ADSTP);
+  
+}
+
+void ADC1_Stop() {
+  
+  SET_BIT(ADC1->CR, ADC_CR_ADSTP);
+  
+}
 
 
 void ResolutionSet(int Resolution) {
