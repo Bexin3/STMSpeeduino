@@ -5,6 +5,7 @@
 
 int ADC1PinRemap(int Pin);
 int ADC2PinRemap(int Pin);
+int ADC3PinRemap(int Pin);
 
 /*
 int A0 = 4;
