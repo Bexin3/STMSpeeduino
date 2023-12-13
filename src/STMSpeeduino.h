@@ -21,8 +21,8 @@ void ADCSimultaneous(int ADC1Channel, int ADC2Channel, int Resolution, double Cl
 void ADC1Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
 void ADC2Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
 
-int CatchADC1Value();
-int CatchADC2Value();
+int CatchADC1Value(uint32_t Timeout);
+int CatchADC2Value(uint32_t Timeout);
 
 void SystemCLCKInit(double ClockSpeedMHZ);
 void ADC2_Start();
