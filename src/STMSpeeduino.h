@@ -27,6 +27,8 @@ int CatchADC2Value();
 void SystemCLCKInit(double ClockSpeedMHZ);
 void ADC2_Start();
 void ADC1_Start();
+void ADC2_Stop();
+void ADC1_Stop();
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
 
