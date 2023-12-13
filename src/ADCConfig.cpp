@@ -398,17 +398,14 @@ if (ClockSpeedMHZ>50) {
 
 
 
-int CatchADC1Value() {
-
-  while (!READ_REG(ADC1->ISR & ADC_ISR_EOC)) {}; //Wait for a new value if the latest one was already read
-return(READ_REG(ADC1->DR)); //Return the new value
-
+int CatchADC1Value(uint32_t Timeout) {
+    uint32_t InitMicros = micros();
+    while (!READ_REG(ADC1->ISR & ADC_ISR_EOC) && (micros() < (InitMicros + Timeout))) {}; //Wait for a new value if the latest one was already read
+    return(READ_REG(ADC1->DR)); //Return the new value
 }
 
-int CatchADC2Value() {
-
-  while (!READ_REG(ADC2->ISR & ADC_ISR_EOC)) {}; //Wait for a new value if the latest one was already read
-return(READ_REG(ADC2->DR)); //Return the new value
-
+int CatchADC2Value(uint32_t Timeout) {
+    uint32_t InitMicros = micros();
+    while (!READ_REG(ADC2->ISR & ADC_ISR_EOC) && (micros() < (InitMicros + Timeout))) {}; //Wait for a new value if the latest one was already read
+    return(READ_REG(ADC2->DR)); //Return the new value
 }
-
