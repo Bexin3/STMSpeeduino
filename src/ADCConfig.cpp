@@ -40,6 +40,14 @@ ADC2_Start();
 
 }
 
+void ADC3Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum) {
+
+SystemCLCKInit(ClockSpeedMHZ);
+ADC3_Init(ADCChannel, Resolution, Differential, SampleTime, Samplenum);
+ADC3_Start();
+
+}
+
 
 
 
@@ -182,6 +190,71 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 }
 
 
+void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
+
+
+
+  /***************ADC not Enabled yet********************/
+
+
+  //Enable the voltage generator  SET_BIT(ADC2->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
+
+  CLEAR_BIT(ADC3->CR, ADC_CR_DEEPPWD);
+
+  SET_BIT(ADC3->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
+  //ADC CALIBRATION-----------------------------------
+
+  AdcChannel=ADC3PinRemap(AdcChannel);
+
+  if(Differential) {
+  SET_BIT(ADC3->CR, ADC_CR_ADCALDIF);
+  };
+  SET_BIT(ADC3->CR, ADC_CR_ADCALLIN);
+  SET_BIT(ADC3->CR, ADC_CR_ADCAL);
+  while (READ_REG(ADC3->CR & ADC_CR_ADCAL)) {};
+
+  SET_BIT(ADC3->CFGR2, ADC_CFGR2_ROVSE);
+
+  ADC3->CFGR2 += 65536 * Samplenum;
+
+
+
+
+  if (Differential) {
+
+  
+  SET_BIT(ADC3->PCSEL, ADC_PCSEL_PCSEL_0 | ADC_PCSEL_PCSEL_1);
+
+  ADC3->SQR1 = 64;
+
+  } else {
+
+  ADC3->PCSEL = 1 << AdcChannel;
+
+  ADC3->SQR1 = 64 * AdcChannel;
+  };
+
+
+
+  ADC3->DIFSEL = 1048575 * Differential;  //Diffmode?
+
+
+
+  SET_BIT(ADC3->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk);  //Enable Continuous mode, Always overwrite data
+
+  Resolution2Set(Resolution);  //Set RESOLUTION
+
+
+
+  ADC3->SMPR1 = SampleTime * 153391689;  //Divide
+  ADC3->SMPR2 = SampleTime * 153391689;  //Divide
+
+
+  SET_BIT(ADC3->CR, ADC_CR_ADEN_Msk);
+
+}
+
+
 
 
 
@@ -267,6 +340,22 @@ void ADC2_Start() {
 
 }
 
+void ADC3_Start() {
+
+  ADC3_COMMON->CCR += 262144*Prescaler;
+
+  while (!READ_REG(ADC3->ISR & ADC_ISR_ADRDY)) {};
+
+  SET_BIT(ADC3->CR, ADC_CR_ADSTART_Msk);  //Start
+
+}
+
+
+void ADC3_Stop() {
+  
+  SET_BIT(ADC3->CR, ADC_CR_ADSTP);
+  
+}
 
 void ADC2_Stop() {
   
@@ -299,6 +388,31 @@ void ResolutionSet(int Resolution) {
       break;
     case 14:
       SET_BIT(ADC1->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
+      break;
+    default:
+      break;
+  };
+}
+
+
+void Resolution3Set(int Resolution) {
+
+  //Sets Resolution
+
+  CLEAR_BIT(ADC3->CFGR, ADC_CFGR_RES);
+
+  switch (Resolution) {
+    case 8:
+      SET_BIT(ADC3->CFGR, ADC_CFGR_RES);
+      break;
+    case 10:
+      SET_BIT(ADC3->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1);
+      break;
+    case 12:
+      SET_BIT(ADC3->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1);
+      break;
+    case 14:
+      SET_BIT(ADC3->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
       break;
     default:
       break;
@@ -375,7 +489,7 @@ dividor = 128;
 
 
   SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_ADC12EN_Msk);  //Enable ADC
-  SET_BIT(RCC->AHB4ENR, RCC_AHB4ENR_GPIOAEN | RCC_AHB4ENR_GPIOBEN | RCC_AHB4ENR_GPIOCEN); //Enable GPIOs
+  SET_BIT(RCC->AHB4ENR, RCC_AHB4ENR_GPIOAEN | RCC_AHB4ENR_GPIOBEN | RCC_AHB4ENR_GPIOCEN | RCC_AHB4ENR_ADC3EN); //Enable GPIOs and ADC3
 
  
 //Set boost mode so ADC can run faster
@@ -408,4 +522,10 @@ int CatchADC2Value(uint32_t Timeout) {
     uint32_t InitMicros = micros();
     while (!READ_REG(ADC2->ISR & ADC_ISR_EOC) && (micros() < (InitMicros + Timeout))) {}; //Wait for a new value if the latest one was already read
     return(READ_REG(ADC2->DR)); //Return the new value
+}
+
+int CatchADC3Value(uint32_t Timeout) {
+    uint32_t InitMicros = micros();
+    while (!READ_REG(ADC3->ISR & ADC_ISR_EOC) && (micros() < (InitMicros + Timeout))) {}; //Wait for a new value if the latest one was already read
+    return(READ_REG(ADC3->DR)); //Return the new value
 }

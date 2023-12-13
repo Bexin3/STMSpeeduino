@@ -6,6 +6,8 @@
 #if defined(ARDUINO_GIGA)
 #define A10 100
 #define A11 101
+#define A8 102
+#define A9 103
 #elif defined(ARDUINO_PORTENTA_H7)
 
 #endif

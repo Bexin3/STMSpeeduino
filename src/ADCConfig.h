@@ -23,6 +23,7 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 void SystemCLCKInit(double ClockSpeedMHZ);
 void ResolutionSet(int Resolution);
 void Resolution2Set(int Resolution);
+void Resolution3Set(int Resolution);
 void ADC3_Start();
 void ADC2_Start();
 void ADC1_Start();
