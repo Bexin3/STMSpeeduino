@@ -97,7 +97,7 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   } else {
 
-  ADC1->PCSEL = 1 << AdcChannel;
+  ADC1->PCSEL = 0xFFFFF;
 
   ADC1->SQR1 = 64 * AdcChannel;
   };
@@ -166,7 +166,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   } else {
 
-  ADC2->PCSEL = 1 << AdcChannel;
+  ADC2->PCSEL = 0xFFFFF;
 
   ADC2->SQR1 = 64 * AdcChannel;
   };
@@ -233,7 +233,7 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   } else {
 
-  ADC3->PCSEL = 1 << AdcChannel;
+  ADC3->PCSEL = 0xFFFFF;
 
   ADC3->SQR1 = 64 * AdcChannel;
   };
@@ -327,7 +327,7 @@ ADC12_COMMON->CCR += 262144*Prescaler;
 
 void ADC1_Start() {
 
-  ADC12_COMMON->CCR += 262144*Prescaler;
+  ADC12_COMMON->CCR += 262144*Prescaler; //
 
   while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
 
@@ -610,7 +610,7 @@ int ADC1InjectedRead(int ADCChannel) {
     };
     while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
     ADC1->JSQR = 512 * ADC1PinRemap(ADCChannel);
-    while (!READ_REG(ADC2->ISR & ADC_ISR_ADRDY)) {};
+    while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
     uint32_t InitMicros = micros();
     SET_BIT(ADC1->CR, ADC_CR_JADSTART);
     while (!READ_REG(ADC1->ISR & ADC_ISR_JEOC) && (micros() < (0xFFF + InitMicros))) {}; //Wait for a new value if the latest one was already read
@@ -642,5 +642,3 @@ int ADC3InjectedRead(int ADCChannel) {
     while (!READ_REG(ADC3->ISR & ADC_ISR_JEOC) && (micros() < (0xFFF + InitMicros))) {}; //Wait for a new value if the latest one was already read
     return(READ_REG(ADC3->JDR1)); //Return the new value
 }
-
-//Add change channel
