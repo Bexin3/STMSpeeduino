@@ -38,6 +38,7 @@ void ADC1_Stop();
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
 
+int FastAnalogRead(int Pin);
 
 void OPAMPCFG(int Gain);
 
