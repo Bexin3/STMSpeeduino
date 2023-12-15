@@ -84,7 +84,7 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
 
   AdcChannel=ADC1PinRemap(AdcChannel);     //Get actual channel number
-  ADC12_COMMON->CCR += 262144*Prescaler;
+
   //ADC CALIBRATION-----------------------------------
 
   if(Differential) {
@@ -159,7 +159,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   //ADC CALIBRATION-----------------------------------
 
   AdcChannel=ADC2PinRemap(AdcChannel);
-  ADC12_COMMON->CCR += 262144*Prescaler;
+    
 
   if(Differential) {
   SET_BIT(ADC2->CR, ADC_CR_ADCALDIF);
