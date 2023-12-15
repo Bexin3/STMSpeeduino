@@ -6,46 +6,61 @@ bool ADC1Initialized = 0;
 bool ADC2Initialized = 0;
 bool ADC3Initialized = 0;
 int Prescaler = 0;
+bool ClockInitialized = 0;
+
 void ADCInterleaved(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ) {
 
-SystemCLCKInit(ClockSpeedMHZ);
+if (!ClockInitialized) {SystemCLCKInit(ClockSpeedMHZ);};
 ADC1_Init(ADCChannel, Resolution, Differential, 0, 0);
 ADC2_Init(ADCChannel, Resolution, Differential, 0, 0);
-ADCInterleaved_Start(Resolution);
+ADCInterleavedConfig(Resolution);
+    ADC1EN();
+    ADC2EN();
+    while (!READ_REG(ADC2->ISR & ADC_ISR_ADRDY)) {};
+    while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
+    ADC1_Start();
 
 }
 
 void ADCSimultaneous(int ADC1Channel, int ADC2Channel, int Resolution, double ClockSpeedMHZ, int SampleTime, int Samplenum) {
 
-
+if (!ClockInitialized) {SystemCLCKInit(ClockSpeedMHZ);};
 SystemCLCKInit(ClockSpeedMHZ);
 ADC1_Init(ADC1Channel, Resolution, 0, SampleTime, Samplenum);
 ADC2_Init(ADC2Channel, Resolution, 0, SampleTime, Samplenum);
-ADCSimultaneous_Start();
-
+ADCSimultaneousConfig();
+    ADC1EN();
+    ADC2EN();
+    while (!READ_REG(ADC2->ISR & ADC_ISR_ADRDY)) {};
+    while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
+    ADC1_Start();
 
 }
 
 void ADC1Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum) {
 
-SystemCLCKInit(ClockSpeedMHZ);
+if (!ClockInitialized) {SystemCLCKInit(ClockSpeedMHZ);};
 ADC1_Init(ADCChannel, Resolution, Differential, SampleTime, Samplenum);
+ADC1EN();
 ADC1_Start();
+    
 
 }
 
 void ADC2Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum) {
 
-SystemCLCKInit(ClockSpeedMHZ);
+if (!ClockInitialized) {SystemCLCKInit(ClockSpeedMHZ);};
 ADC2_Init(ADCChannel, Resolution, Differential, SampleTime, Samplenum);
+ADC2EN();
 ADC2_Start();
 
 }
 
 void ADC3Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum) {
 
-SystemCLCKInit(ClockSpeedMHZ);
+if (!ClockInitialized) {SystemCLCKInit(ClockSpeedMHZ);};
 ADC3_Init(ADCChannel, Resolution, Differential, SampleTime, Samplenum);
+ADC3EN();
 ADC3_Start();
 
 }
@@ -69,7 +84,7 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
 
   AdcChannel=ADC1PinRemap(AdcChannel);     //Get actual channel number
-  
+  ADC12_COMMON->CCR += 262144*Prescaler;
   //ADC CALIBRATION-----------------------------------
 
   if(Differential) {
@@ -116,12 +131,14 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
 
 
-  ADC1->SMPR1 = SampleTime * 153391689;  //Set sampletime
-  ADC1->SMPR2 = SampleTime * 153391689;  //Set sampletime
+  ADC1->SMPR1 = SampleTime;  //Set sampletime
+
+  ADC12_COMMON->CCR = 262144*Prescaler;
 
 
-
-  SET_BIT(ADC1->CR, ADC_CR_ADEN_Msk);                               //Enable ADC
+  //SET_BIT(ADC1->CR, ADC_CR_ADEN_Msk);                               //Enable ADC
+    
+   // ADC12_COMMON->CCR += 262144*Prescaler; //
   
     ADC1Initialized = 1;
 }
@@ -142,6 +159,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   //ADC CALIBRATION-----------------------------------
 
   AdcChannel=ADC2PinRemap(AdcChannel);
+  ADC12_COMMON->CCR += 262144*Prescaler;
 
   if(Differential) {
   SET_BIT(ADC2->CR, ADC_CR_ADCALDIF);
@@ -186,10 +204,13 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   ADC2->SMPR1 = SampleTime * 153391689;  //Divide
   ADC2->SMPR2 = SampleTime * 153391689;  //Divide
 
+  ADC12_COMMON->CCR += 262144*Prescaler;
 
-  SET_BIT(ADC2->CR, ADC_CR_ADEN_Msk);  
+
     
-    ADC1Initialized = 2;
+
+    
+    ADC2Initialized = 1;
 
 }
 
@@ -209,6 +230,7 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   //ADC CALIBRATION-----------------------------------
 
   AdcChannel=ADC3PinRemap(AdcChannel);
+
 
   if(Differential) {
   SET_BIT(ADC3->CR, ADC_CR_ADCALDIF);
@@ -254,7 +276,8 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   ADC3->SMPR2 = SampleTime * 153391689;  //Divide
 
 
-  SET_BIT(ADC3->CR, ADC_CR_ADEN_Msk);
+  ADC3_COMMON->CCR += 262144*Prescaler;
+
     
     ADC3Initialized = 1;
 
@@ -290,44 +313,44 @@ void Resolution2Set(int Resolution) {
 
 
 
-void ADCInterleaved_Start(int Resolution) {  
+void ADCInterleavedConfig(int Resolution) {
 
-ADC12_COMMON->CCR += 262144*Prescaler;
 
+    SET_BIT(ADC12_COMMON->CCR, ADC_CCR_DUAL_0 | ADC_CCR_DUAL_1);
+/*
 if (Resolution = 16) {
    ADC12_COMMON->CCR = 7+(2*256);
 } else {
    ADC12_COMMON->CCR = 7+(1*256);
 };
+*/
 
 
-  while (!READ_REG(ADC2->ISR & ADC_ISR_ADRDY)) {};
-  while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
-
-
-  SET_BIT(ADC1->CR, ADC_CR_ADSTART_Msk);  //Start
 
 }
 
 
-void ADCSimultaneous_Start() {  
+void ADCSimultaneousConfig() {
+    
+    SET_BIT(ADC12_COMMON->CCR, ADC_CCR_DUAL_0);
+    
+}
+    
+void ADC1EN() {
+        SET_BIT(ADC1->CR, ADC_CR_ADEN_Msk);
+}
 
-ADC12_COMMON->CCR += 262144*Prescaler;
+void ADC2EN() {
+        SET_BIT(ADC2->CR, ADC_CR_ADEN_Msk);
+}
 
-   ADC12_COMMON->CCR = 6;
-
-
-  while (!READ_REG(ADC2->ISR & ADC_ISR_ADRDY)) {};
-  while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
-
-
-  SET_BIT(ADC1->CR, ADC_CR_ADSTART_Msk);  //Start
-
+void ADC3EN() {
+        SET_BIT(ADC3->CR, ADC_CR_ADEN_Msk);
 }
 
 void ADC1_Start() {
 
-  ADC12_COMMON->CCR += 262144*Prescaler; //
+
 
   while (!READ_REG(ADC1->ISR & ADC_ISR_ADRDY)) {};
 
@@ -338,7 +361,7 @@ void ADC1_Start() {
 
 void ADC2_Start() {
 
-  ADC12_COMMON->CCR += 262144*Prescaler;
+
 
   while (!READ_REG(ADC2->ISR & ADC_ISR_ADRDY)) {};
 
@@ -348,7 +371,7 @@ void ADC2_Start() {
 
 void ADC3_Start() {
 
-  ADC3_COMMON->CCR += 262144*Prescaler;
+
 
   while (!READ_REG(ADC3->ISR & ADC_ISR_ADRDY)) {};
 
@@ -360,19 +383,55 @@ void ADC3_Start() {
 void ADC3_Stop() {
   
   SET_BIT(ADC3->CR, ADC_CR_ADSTP); //Clear result ready flag.
+  while (READ_REG(ADC3->CR & ADC_CR_ADSTP)) {};
+    ADC3->ISR &= 1 << 2;
   
 }
 
 void ADC2_Stop() {
   
   SET_BIT(ADC2->CR, ADC_CR_ADSTP);
+  while (READ_REG(ADC2->CR & ADC_CR_ADSTP)) {};
+    ADC2->ISR &= 1 << 2;
   
 }
 
 void ADC1_Stop() {
   
   SET_BIT(ADC1->CR, ADC_CR_ADSTP);
-  
+  while (READ_REG(ADC1->CR & ADC_CR_ADSTP)) {};
+    ADC1->ISR &= 1 << 2;
+}
+
+
+void ADC1ChangeChannel(int AdcChannel) {
+    bool ADActive = READ_REG(ADC1->CR & ADC_CR_ADSTART);
+    if(ADActive) {ADC1_Stop();};
+    
+    while (READ_REG(ADC1->CR & ADC_CR_ADSTP) || READ_REG(ADC1->CR & ADC_CR_JADSTART)) {};
+    ADC1->SQR1 = 64 * ADC1PinRemap(AdcChannel);
+    
+    if(ADActive) {ADC1_Start();};
+}
+
+void ADC2ChangeChannel(int AdcChannel) {
+    bool ADActive = READ_REG(ADC2->CR & ADC_CR_ADSTART);
+    if(ADActive) {ADC2_Stop();};
+    
+    while (READ_REG(ADC2->CR & ADC_CR_ADSTP) || READ_REG(ADC2->CR & ADC_CR_JADSTART)) {};
+    ADC2->SQR1 = 64 * ADC2PinRemap(AdcChannel);
+    
+    if(ADActive) {ADC2_Start();};
+}
+
+void ADC3ChangeChannel(int AdcChannel) {
+    bool ADActive = READ_REG(ADC3->CR & ADC_CR_ADSTART);
+    if(ADActive) {ADC3_Stop();};
+    
+    while (READ_REG(ADC3->CR & ADC_CR_ADSTP) || READ_REG(ADC3->CR & ADC_CR_JADSTART)) {};
+    ADC3->SQR1 = 64 * ADC3PinRemap(AdcChannel);
+    
+    if(ADActive) {ADC3_Start();};
 }
 
 
@@ -503,15 +562,18 @@ dividor = 128;
 if (ClockSpeedMHZ>50) {
   SET_BIT(ADC1->CR, ADC_CR_BOOST);
   SET_BIT(ADC2->CR, ADC_CR_BOOST);
+  SET_BIT(ADC3->CR, ADC_CR_BOOST);
 } else if (ClockSpeedMHZ>25) {
   SET_BIT(ADC1->CR, ADC_CR_BOOST_1);
   SET_BIT(ADC2->CR, ADC_CR_BOOST_1);
+  SET_BIT(ADC3->CR, ADC_CR_BOOST_0);
 } else if (ClockSpeedMHZ>12.5) {
   SET_BIT(ADC1->CR, ADC_CR_BOOST_0);
   SET_BIT(ADC2->CR, ADC_CR_BOOST_0);
+  SET_BIT(ADC3->CR, ADC_CR_BOOST_0);
 }
 
-  delay(100); //Make sure changes got applied
+ // delay(100); //Make sure changes got applied
 }
 
 

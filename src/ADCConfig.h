@@ -30,8 +30,14 @@ void ADC1_Start();
 void ADC3_Stop();
 void ADC2_Stop();
 void ADC1_Stop();
-void ADCSimultaneous_Start();
-void ADCInterleaved_Start(int Resolution);
+void ADC3ChangeChannel(int AdcChannel);
+void ADC2ChangeChannel(int AdcChannel);
+void ADC1ChangeChannel(int AdcChannel);
+void ADC1EN();
+void ADC2EN();
+void ADC3EN();
+void ADCSimultaneousConfig();
+void ADCInterleavedConfig(int Resolution);
 
 int ADC1InjectedRead(int ADCChannel);
 int ADC2InjectedRead(int ADCChannel);

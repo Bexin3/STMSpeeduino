@@ -35,6 +35,9 @@ void ADC1_Start();
 void ADC3_Stop();
 void ADC2_Stop();
 void ADC1_Stop();
+void ADC3ChangeChannel(int AdcChannel);
+void ADC2ChangeChannel(int AdcChannel);
+void ADC1ChangeChannel(int AdcChannel);
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
 
