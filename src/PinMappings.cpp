@@ -24,7 +24,7 @@ int ADC1PinRemap(int Pin) {
     case DAC_1: return (19);
   default: return(-1);
   };
-}
+}//Add change pin
 
 int ADC2PinRemap(int Pin) {
   switch (Pin) {
