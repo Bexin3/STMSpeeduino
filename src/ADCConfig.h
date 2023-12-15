@@ -33,5 +33,9 @@ void ADC1_Stop();
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
 
+int ADC1InjectedRead(int ADCChannel);
+int ADC2InjectedRead(int ADCChannel);
+int ADC3InjectedRead(int ADCChannel);
+int FastAnalogRead(int Pin);
 
 #endif
