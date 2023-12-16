@@ -103,19 +103,11 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   //Select channel
 
-  if (Differential) {
-
-  
-  SET_BIT(ADC1->PCSEL, ADC_PCSEL_PCSEL_0 | ADC_PCSEL_PCSEL_1);
-
-  ADC1->SQR1 = 64;
-
-  } else {
 
   ADC1->PCSEL = 0xFFFFF;
 
   ADC1->SQR1 = 64 * AdcChannel;
-  };
+
 
 
 
@@ -175,19 +167,12 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
 
 
-  if (Differential) {
-
-  
-  SET_BIT(ADC2->PCSEL, ADC_PCSEL_PCSEL_0 | ADC_PCSEL_PCSEL_1);
-
-  ADC2->SQR1 = 64;
-
-  } else {
+ 
 
   ADC2->PCSEL = 0xFFFFF;
 
   ADC2->SQR1 = 64 * AdcChannel;
-  };
+
 
 
 
@@ -246,19 +231,10 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
 
 
-  if (Differential) {
-
-  
-  SET_BIT(ADC3->PCSEL, ADC_PCSEL_PCSEL_0 | ADC_PCSEL_PCSEL_1);
-
-  ADC3->SQR1 = 64;
-
-  } else {
-
   ADC3->PCSEL = 0xFFFFF;
 
   ADC3->SQR1 = 64 * AdcChannel;
-  };
+ 
 
 
 
