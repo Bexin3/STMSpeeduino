@@ -133,7 +133,7 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   ADC1->SMPR1 = SampleTime;  //Set sampletime
 
-  ADC12_COMMON->CCR = 262144*Prescaler;
+
 
 
   //SET_BIT(ADC1->CR, ADC_CR_ADEN_Msk);                               //Enable ADC
@@ -159,7 +159,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   //ADC CALIBRATION-----------------------------------
 
   AdcChannel=ADC2PinRemap(AdcChannel);
-    
+
 
   if(Differential) {
   SET_BIT(ADC2->CR, ADC_CR_ADCALDIF);
@@ -204,7 +204,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   ADC2->SMPR1 = SampleTime * 153391689;  //Divide
   ADC2->SMPR2 = SampleTime * 153391689;  //Divide
 
-  ADC12_COMMON->CCR += 262144*Prescaler;
+
 
 
     
@@ -276,7 +276,7 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
   ADC3->SMPR2 = SampleTime * 153391689;  //Divide
 
 
-  ADC3_COMMON->CCR += 262144*Prescaler;
+
 
     
     ADC3Initialized = 1;
@@ -337,14 +337,17 @@ void ADCSimultaneousConfig() {
 }
     
 void ADC1EN() {
+    ADC12_COMMON->CCR |= Prescaler << 18;
         SET_BIT(ADC1->CR, ADC_CR_ADEN_Msk);
 }
 
 void ADC2EN() {
+    ADC12_COMMON->CCR |= Prescaler << 18;
         SET_BIT(ADC2->CR, ADC_CR_ADEN_Msk);
 }
 
 void ADC3EN() {
+    ADC3_COMMON->CCR |= Prescaler << 18;
         SET_BIT(ADC3->CR, ADC_CR_ADEN_Msk);
 }
 
@@ -384,15 +387,13 @@ void ADC3_Stop() {
   
   SET_BIT(ADC3->CR, ADC_CR_ADSTP); //Clear result ready flag.
   while (READ_REG(ADC3->CR & ADC_CR_ADSTP)) {};
-    ADC3->ISR &= 1 << 2;
-  
+
 }
 
 void ADC2_Stop() {
   
   SET_BIT(ADC2->CR, ADC_CR_ADSTP);
   while (READ_REG(ADC2->CR & ADC_CR_ADSTP)) {};
-    ADC2->ISR &= 1 << 2;
   
 }
 
@@ -400,7 +401,7 @@ void ADC1_Stop() {
   
   SET_BIT(ADC1->CR, ADC_CR_ADSTP);
   while (READ_REG(ADC1->CR & ADC_CR_ADSTP)) {};
-    ADC1->ISR &= 1 << 2;
+
 }
 
 
