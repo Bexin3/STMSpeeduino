@@ -13,7 +13,7 @@ uint16_t* Buffer3Add; //Address for the buffer
 
 
 
-void captureADC1values(int Size, uint16_t* BufferAddress) {
+void captureADC1values(uint16_t Size, uint16_t* BufferAddress) {
     ADC1_Stop(); //Stop ADC
     ADC1Size = Size; //Write down the ADC Size
     Buffer1Add = BufferAddress; //Write down the buffer address
@@ -23,7 +23,7 @@ void captureADC1values(int Size, uint16_t* BufferAddress) {
     ADC1_Start();
 } 
 
-void captureADC2values(int Size, uint16_t* BufferAddress) {
+void captureADC2values(uint16_t Size, uint16_t* BufferAddress) {
     ADC2_Stop(); //Stop ADC
     ADC2Size = Size; //Write down the ADC Size
     Buffer2Add = BufferAddress; //Write down the buffer address
@@ -32,7 +32,7 @@ void captureADC2values(int Size, uint16_t* BufferAddress) {
     ConfigDMA1_S6(Size, 0x40022140, BufferAddress, 1, 10); //Configure the relevant DMA stream as required
     ADC2_Start(); //Start the ADC
 }
-void captureADC3values(int Size, uint16_t* BufferAddress) {
+void captureADC3values(uint16_t Size, uint16_t* BufferAddress) {
     ADC3_Stop(); //Stop ADC
     ADC3Size = Size; //Write down the ADC Size
     Buffer3Add = BufferAddress; //Write down the buffer address
@@ -42,7 +42,7 @@ void captureADC3values(int Size, uint16_t* BufferAddress) {
     ADC3_Start(); //Start the ADC
 }
 
-void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
+void captureInterleavedValues(uint16_t Size, uint16_t* BufferAddress) {
     ADC1_Stop(); //Stop ADC
     ADC2_Stop(); //Stop ADC
     ADC12Size = Size; //Write down the ADC Size
@@ -56,7 +56,7 @@ void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
     ADC2_Start(); //Start the ADC
 }
 
-void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address) {
+void captureSimultaneousValues(uint16_t Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address) {
     ADC1_Stop(); //Stop ADC
     ADC2_Stop(); //Stop ADC
     Buffer1Add = Buffer1Address; //Write down the buffer address
