@@ -56,3 +56,4 @@ TransferADC1/2/3/Interleaved/SimultaneousComplete - Checks if DMA transfer is co
 
 
 Due to caching if you read buffer value while the program is running you may have to invalidate it
+DMA can transfer up to 65535 values.
