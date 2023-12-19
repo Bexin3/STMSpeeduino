@@ -18,6 +18,7 @@ captureSimultaneousValues(ValuesToBuffer, FrameBuffer1, FrameBuffer2);
 
 void loop() {
 //Write out the values
+while(!TransferSimultaneousComplete()) {}; //Wait for the transfer to be complete
 for (int i = 0; i < ValuesToBuffer; i++) {
 Serial.print("ADC1 value ");
 Serial.print(i);
@@ -31,6 +32,6 @@ Serial.println(FrameBuffer2[i]);
 };
 
 recaptureSimultaneousValues(); //Start the capture again
-delay(100); //Wait 0.1s
+
 
 }
