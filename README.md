@@ -55,5 +55,4 @@ recaptureInterleaved/SimultaneousValues - Store values again using last settings
 TransferADC1/2/3/Interleaved/SimultaneousComplete - Checks if DMA transfer is complete
 
 
-While loops may not work with is Complete value
 Due to caching if you read buffer value while the program is running you may have to invalidate it
