@@ -58,6 +58,12 @@ void recaptureADC3values();
 void recaptureInterleavedValues();
 void recaptureSimultaneousValues();
 
+bool TransferADC1Complete();
+bool TransferADC2Complete();
+bool TransferADC3Complete();
+bool TransferInterleavedComplete();
+bool TransferSimultaneousComplete();
+
 
 
 #endif
