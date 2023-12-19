@@ -16,6 +16,7 @@
 #include "ADCConfig.h"
 #include "Opamp.h"
 #include "PinMappings.h"
+#include "DMAConfig.h"
 
 void ADC_GetReady();
 void ADCInterleaved(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ);
@@ -44,6 +45,18 @@ void ADCInterleaved_Start(int Resolution);
 int FastAnalogRead(int Pin);
 
 void OPAMPCFG(int Gain);
+
+void captureADC1values(int Size, uint16_t* BufferAddress);
+void captureADC2values(int Size, uint16_t* BufferAddress);
+void captureADC3values(int Size, uint16_t* BufferAddress);
+void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address);
+void captureInterleavedValues(int Size, uint16_t* BufferAddress);
+
+void recaptureADC1values();
+void recaptureADC2values();
+void recaptureADC3values();
+void recaptureInterleavedValues();
+void recaptureSimultaneousValues();
 
 
 
