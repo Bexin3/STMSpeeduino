@@ -18,7 +18,6 @@
 #include "PinMappings.h"
 #include "DMAConfig.h"
 
-void ADC_GetReady();
 void ADCInterleaved(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ);
 void ADCSimultaneous(int ADC1Channel, int ADC2Channel, int Resolution, double ClockSpeedMHZ, int SampleTime, int Samplenum);
 void ADC1Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
