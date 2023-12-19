@@ -8,10 +8,10 @@ void ADC_GetReady();
 
 
 void ADCInterleaved(int ADCChannel = A0, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40);
-void ADCSimultaneous(int ADC1Channel = A0, int ADC2Channel = 1, int Resolution = 16, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
+void ADCSimultaneous(int ADC1Channel = A0, int ADC2Channel = A1, int Resolution = 16, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
 void ADC1Begin(int ADCChannel = A0, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
 void ADC2Begin(int ADCChannel = A0, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
-void ADC3Begin(int ADCChannel = A0, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
+void ADC3Begin(int ADCChannel = A5, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
 
 int CatchADC1Value(uint32_t Timeout = 0xFFFFFF);
 int CatchADC2Value(uint32_t Timeout = 0xFFFFFF);
