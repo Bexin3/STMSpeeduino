@@ -24,7 +24,7 @@ int ADC1PinRemap(int Pin) {
     case DAC_1: return (19);
   default: return(-1);
   };
-}//Add change pin
+} //Remap pins to channel IDs
 
 int ADC2PinRemap(int Pin) {
   switch (Pin) {
@@ -46,7 +46,7 @@ int ADC2PinRemap(int Pin) {
     case DAC_1: return (19);
   default: return(-1);
   };
-}
+} //Remap pins to channel IDs
 
 int ADC3PinRemap(int Pin) {
   switch (Pin) {
@@ -58,20 +58,20 @@ int ADC3PinRemap(int Pin) {
     case 21: return (15);
   default: return(-1);
   };
-}
+} //Remap pins to channel IDs
 
 //#elif defined(ARDUINO_PORTENTA_H7)
 #else
 
 int ADC1PinRemap(int Pin) {
   return (Pin);
-}
+} //Return raw Pin if unadded board
 
 int ADC2PinRemap(int Pin) {
   return (Pin);
-}
+} //Return raw Pin if unadded board
 
 int ADC3PinRemap(int Pin) {
   return (Pin);
-}
+} //Return raw Pin if unadded board
 #endif
