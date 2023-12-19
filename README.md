@@ -39,7 +39,7 @@ CatchADC1/2/3 Value - writes down the ADC value from latest conversion, and if i
 OPAMPCFG - starts the operational amplifier, only supported when using Giga R1 Wifi.
 
 
-DMA Functions; ((Adcs have to be initiated)
+DMA Functions; (Adcs have to be initiated, using the ones starting or restarting transfer will lead to the ADC being stopped after) 
 
 
 captureADC1/2/3values - Store a defined ammount of values into a buffer
