@@ -191,3 +191,25 @@ void recaptureSimultaneousValues() {
     SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC12Size*2);
     SCB_InvalidateDCache_by_Addr(Buffer2Add, ADC12Size*2);
 }
+
+bool TransferADC1Complete() {
+return(READ_BIT(DMA1->HISR, DMA_HISR_TCIF5));
+}
+
+bool TransferADC2Complete() {
+return(READ_BIT(DMA1->HISR, DMA_HISR_TCIF6));
+}
+
+bool TransferADC3Complete() {
+return(READ_BIT(DMA1->HISR, DMA_HISR_TCIF7));
+}
+
+bool TransferInterleavedComplete() {
+return(READ_BIT(DMA1->HISR, DMA_HISR_TCIF5));
+}
+
+bool TransferSimultaneousComplete() {
+return(READ_BIT(DMA1->HISR, DMA_HISR_TCIF5));
+}
+
+
