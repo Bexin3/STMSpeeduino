@@ -31,3 +31,5 @@ ADC1/2/3Stop - Stops one of the ADCs
 CatchADC1/2/3Value - writes down the ADC value from latest conversion, and if it was already read, waits for next conversion to happen
 
 OPAMPCFG - starts the operational amplifier, only supported when using Giga R1 Wifi.
+
+While loops may not work with is Complete
