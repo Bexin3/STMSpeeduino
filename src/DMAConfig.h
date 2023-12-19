@@ -19,5 +19,11 @@ void ConfigDMA1_S5(uint16_t Size, int InAddress, uint16_t* OutAddress, int Trans
 void ConfigDMA1_S6(uint16_t Size, int InAddress, uint16_t* OutAddress, int TransferSize, int DmaMUX);
 void ConfigDMA1_S7(uint16_t Size, int InAddress, uint16_t* OutAddress, int TransferSize, int DmaMUX);
 
+bool TransferADC1Complete();
+bool TransferADC2Complete();
+bool TransferADC3Complete();
+bool TransferInterleavedComplete();
+bool TransferSimultaneousComplete();
+
 
 #endif
