@@ -150,14 +150,14 @@ void recaptureADC1values() {
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5);
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF5);
     DMA1_Stream5->CR |= 1 << 0;
-    SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC1Size);
+    SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC1Size*2);
 }
 void recaptureADC2values() {
     ADC2_Start();
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF6);
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF6);
     DMA1_Stream6->CR |= 1 << 0;
-    SCB_InvalidateDCache_by_Addr(Buffer2Add, ADC2Size);
+    SCB_InvalidateDCache_by_Addr(Buffer2Add, ADC2Size*2);
 }
 
 void recaptureADC3values() {
@@ -165,7 +165,7 @@ void recaptureADC3values() {
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF7);
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF7);
     DMA1_Stream7->CR |= 1 << 0;
-    SCB_InvalidateDCache_by_Addr(Buffer3Add, ADC3Size);
+    SCB_InvalidateDCache_by_Addr(Buffer3Add, ADC3Size*2);
 }
 
 void recaptureInterleavedValues() {
@@ -175,7 +175,7 @@ void recaptureInterleavedValues() {
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF5);
     DMA1_Stream5->CR |= 1 << 0;
     
-    SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC12Size);
+    SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC12Size*2);
 }
 
 void recaptureSimultaneousValues() {
@@ -188,6 +188,6 @@ void recaptureSimultaneousValues() {
     DMA1_Stream5->CR |= 1 << 0;
     DMA1_Stream6->CR |= 1 << 0;
     
-    SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC12Size);
-    SCB_InvalidateDCache_by_Addr(Buffer2Add, ADC12Size);
+    SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC12Size*2);
+    SCB_InvalidateDCache_by_Addr(Buffer2Add, ADC12Size*2);
 }
