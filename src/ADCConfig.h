@@ -17,6 +17,7 @@ int CatchADC3Value(uint32_t Timeout = 0xFFFFFF);
 void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum);
 void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum);
 void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum);
+void ADCInitialize(ADC_TypeDef * ADC, int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum)
 void SystemCLCKInit(double ClockSpeedMHZ);
 void ResolutionSet(int Resolution);
 void Resolution2Set(int Resolution);
