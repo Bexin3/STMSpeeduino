@@ -66,184 +66,71 @@ ADC3_Start(); //Start ADC3 conversions
 } //Initiates and starts ADC3
 
 
+void ADCInitialize(ADC_TypeDef * ADC, int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
 
-
-
-void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
-
-
-  //GPIOA PORT 1------------------------------------
-
-  
-
+    
   /***************ADC not Enabled yet********************/
 
-  CLEAR_BIT(ADC1->CR, ADC_CR_DEEPPWD);     //Wake up from deep sleep
+  CLEAR_BIT(ADC->CR, ADC_CR_DEEPPWD);     //Wake up from deep sleep
 
-  SET_BIT(ADC1->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
+  SET_BIT(ADC->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
 
 
-  AdcChannel=ADC1PinRemap(AdcChannel);     //Get actual channel number
 
   //ADC CALIBRATION
 
   if(Differential) {
-  SET_BIT(ADC1->CR, ADC_CR_ADCALDIF); 
+  SET_BIT(ADC->CR, ADC_CR_ADCALDIF); 
   };
-  SET_BIT(ADC1->CR, ADC_CR_ADCALLIN);
-  SET_BIT(ADC1->CR, ADC_CR_ADCAL);
-  while (READ_REG(ADC1->CR & ADC_CR_ADCAL)) {};
+  SET_BIT(ADC->CR, ADC_CR_ADCALLIN);
+  SET_BIT(ADC->CR, ADC_CR_ADCAL);
+  while (READ_REG(ADC->CR & ADC_CR_ADCAL)) {};
 
   
-  SET_BIT(ADC1->CFGR2, ADC_CFGR2_ROVSE); //Set oversampling
+  SET_BIT(ADC->CFGR2, ADC_CFGR2_ROVSE); //Set oversampling
 
   
-  ADC1->CFGR2 += 65536 * Samplenum; //Set number of samples
+  ADC->CFGR2 += 65536 * Samplenum; //Set number of samples
 
 
 
 
-  ADC1->PCSEL = 0xFFFFF; //Enable all channels
+  ADC->PCSEL = 0xFFFFF; //Enable all channels
 
-  ADC1->SQR1 = 64 * AdcChannel;   //Select channel
-
-
-
-  ADC1->DIFSEL = 1048575 * Differential;  //Enable differential mode if needed
+  ADC->SQR1 = 64 * AdcChannel;   //Select channel
 
 
 
-  SET_BIT(ADC1->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
-
-  ResolutionSet(ADC1, Resolution);  //Set resolution
+  ADC->DIFSEL = 1048575 * Differential;  //Enable differential mode if needed
 
 
 
-  ADC1->SMPR1 = SampleTime;  //Set sampletime
+  SET_BIT(ADC->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
 
-  
-  ADC1Initialized = 1;
+  ResolutionSet(ADC, Resolution);  //Set resolution
+
+
+
+  ADC->SMPR1 = SampleTime;  //Set sampletime
+
+}
+
+
+void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
+    ADCInitialize(ADC1, AdcChannel, Resolution, Differential, SampleTime, Samplenum);
+    ADC1Initialized = 1;
 }
 
 
 void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
-
-
-
-  /***************ADC not Enabled yet********************/
-
-
-  //Enable the voltage generator  SET_BIT(ADC2->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
-
-  CLEAR_BIT(ADC2->CR, ADC_CR_DEEPPWD);
-
-  SET_BIT(ADC2->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
-
-
-  AdcChannel=ADC2PinRemap(AdcChannel); //Get actual channel number
-
-  //ADC CALIBRATION-----------------------------------
-  if(Differential) {
-  SET_BIT(ADC2->CR, ADC_CR_ADCALDIF);
-  };
-  SET_BIT(ADC2->CR, ADC_CR_ADCALLIN);
-  SET_BIT(ADC2->CR, ADC_CR_ADCAL);
-  while (READ_REG(ADC2->CR & ADC_CR_ADCAL)) {};
-
-  SET_BIT(ADC2->CFGR2, ADC_CFGR2_ROVSE); //Allow Oversampling
-
-  ADC2->CFGR2 += 65536 * Samplenum; //Set number of samples
-
-
-
-  ADC2->PCSEL = 0xFFFFF; //Enable all channels
-
-  ADC2->SQR1 = 64 * AdcChannel; //Select a channel
-
-
-
-
-  ADC2->DIFSEL = 1048575 * Differential;  //Enable differential mode if needed
-
-
-
-  SET_BIT(ADC2->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
-
-  ResolutionSet(ADC2, Resolution);  //Set RESOLUTION
-
-
-
-  ADC2->SMPR1 = SampleTime * 153391689;  //Divide
-  ADC2->SMPR2 = SampleTime * 153391689;  //Divide
-
-
-
-
-    
-
-    
+    ADCInitialize(ADC2, AdcChannel, Resolution, Differential, SampleTime, Samplenum);
     ADC2Initialized = 1;
-
 }
 
 
 void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
-
-
-
-  /***************ADC not Enabled yet********************/
-
-
-  //Enable the voltage generator  SET_BIT(ADC2->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
-
-  CLEAR_BIT(ADC3->CR, ADC_CR_DEEPPWD);
-
-  SET_BIT(ADC3->CR, ADC_CR_ADVREGEN_Msk);  //Enable the voltage generator
-
-
-  AdcChannel=ADC3PinRemap(AdcChannel); //Get actual channel id
-
-  //ADC CALIBRATION-----------------------------------
-  if(Differential) {
-  SET_BIT(ADC3->CR, ADC_CR_ADCALDIF);
-  };
-  SET_BIT(ADC3->CR, ADC_CR_ADCALLIN);
-  SET_BIT(ADC3->CR, ADC_CR_ADCAL);
-  while (READ_REG(ADC3->CR & ADC_CR_ADCAL)) {};
-
-  SET_BIT(ADC3->CFGR2, ADC_CFGR2_ROVSE); //Allow oversampling
-
-  ADC3->CFGR2 += 65536 * Samplenum; //Set number of samples
-
-
-
-
-  ADC3->PCSEL = 0xFFFFF; //Enable all ADC Channels
-
-  ADC3->SQR1 = 64 * AdcChannel; //Select ADC Channel
- 
-
-
-
-  ADC3->DIFSEL = 1048575 * Differential;  //Enable differential mode if needed
-
-
-
-  SET_BIT(ADC3->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
-
-  ResolutionSet(ADC3, Resolution);  //Set RESOLUTION
-
-
-
-  ADC3->SMPR1 = SampleTime * 153391689;  //Divide
-  ADC3->SMPR2 = SampleTime * 153391689;  //Divide
-
-
-
-
-    
+    ADCInitialize(ADC3, AdcChannel, Resolution, Differential, SampleTime, Samplenum);
     ADC3Initialized = 1;
-
 }
 
 
