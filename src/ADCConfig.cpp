@@ -231,7 +231,7 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   SET_BIT(ADC3->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
 
-  Resolution2Set(Resolution);  //Set RESOLUTION
+  Resolution3Set(Resolution);  //Set RESOLUTION
 
 
 
