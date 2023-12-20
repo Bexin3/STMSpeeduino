@@ -115,7 +115,7 @@ void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   SET_BIT(ADC1->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
 
-  ResolutionSet(Resolution);  //Set resolution
+  ResolutionSet(ADC1, Resolution);  //Set resolution
 
 
 
@@ -169,7 +169,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   SET_BIT(ADC2->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
 
-  Resolution2Set(Resolution);  //Set RESOLUTION
+  ResolutionSet(ADC2, Resolution);  //Set RESOLUTION
 
 
 
@@ -231,7 +231,7 @@ void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   SET_BIT(ADC3->CFGR, ADC_CFGR_OVRMOD_Msk | ADC_CFGR_CONT_Msk | ADC_CFGR_JQM | ADC_CFGR_JDISCEN);  //Enable Continuous mode, Always overwrite data
 
-  Resolution2Set(Resolution);  //Set RESOLUTION
+  ResolutionSet(ADC3, Resolution);  //Set RESOLUTION
 
 
 
@@ -365,81 +365,29 @@ void ADC3ChangeChannel(int AdcChannel) {
 }
 
 
-void ResolutionSet(int Resolution) {
+void ResolutionSet(ADC_TypeDef * ADC, int Resolution) {
 
   //Sets Resolution for the ADC
 
-  CLEAR_BIT(ADC1->CFGR, ADC_CFGR_RES);
+  CLEAR_BIT(ADC->CFGR, ADC_CFGR_RES);
 
   switch (Resolution) {
     case 8:
-      SET_BIT(ADC1->CFGR, ADC_CFGR_RES);
+      SET_BIT(ADC->CFGR, ADC_CFGR_RES);
       break;
     case 10:
-      SET_BIT(ADC1->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1);
+      SET_BIT(ADC->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1);
       break;
     case 12:
-      SET_BIT(ADC1->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1);
+      SET_BIT(ADC->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1);
       break;
     case 14:
-      SET_BIT(ADC1->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
+      SET_BIT(ADC->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
       break;
     default:
       break;
   };
 }
-
-
-
-void Resolution2Set(int Resolution) {
-
-  //Sets Resolution for the ADC
-
-  CLEAR_BIT(ADC2->CFGR, ADC_CFGR_RES);
-
-  switch (Resolution) {
-    case 8:
-      SET_BIT(ADC2->CFGR, ADC_CFGR_RES);
-      break;
-    case 10:
-      SET_BIT(ADC2->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1);
-      break;
-    case 12:
-      SET_BIT(ADC2->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1);
-      break;
-    case 14:
-      SET_BIT(ADC2->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
-      break;
-    default:
-      break;
-  };
-}
-
-
-void Resolution3Set(int Resolution) {
-
-  //Sets Resolution for the ADC
-
-  CLEAR_BIT(ADC3->CFGR, ADC_CFGR_RES);
-
-  switch (Resolution) {
-    case 8:
-      SET_BIT(ADC3->CFGR, ADC_CFGR_RES);
-      break;
-    case 10:
-      SET_BIT(ADC3->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1);
-      break;
-    case 12:
-      SET_BIT(ADC3->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1);
-      break;
-    case 14:
-      SET_BIT(ADC3->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
-      break;
-    default:
-      break;
-  };
-}
-
 
 
 
