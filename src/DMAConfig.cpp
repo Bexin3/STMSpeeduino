@@ -140,35 +140,35 @@ void ConfigDMA1_S7(uint16_t Size, int InAddress, uint16_t* OutAddress, int Trans
 
 void recaptureADC1values() {
     ADC1_Start(); //Start the ADC
-    //Clear the transfer flags
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF5);
+    
+    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTCIF5);  //Clear the transfer flags
+    
     DMA1_Stream5->CR |= 1 << 0; //Enable the DMA stream
     SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC1Size*2);
 }
 void recaptureADC2values() {
     ADC2_Start(); //Start the ADC
-    //Clear the transfer flags
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF6);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF6);
+
+    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF6 | DMA_HIFCR_CTCIF6);  //Clear the transfer flags
+    
     DMA1_Stream6->CR |= 1 << 0; //Enable the DMA stream
     SCB_InvalidateDCache_by_Addr(Buffer2Add, ADC2Size*2); //Invalidate the cache
 }
 
 void recaptureADC3values() {
     ADC3_Start(); //Start the ADC
-    //Clear the transfer flags
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF7);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF7);
+
+    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF7 | DMA_HIFCR_CTCIF7);  //Clear the transfer flags
+    
     DMA1_Stream7->CR |= 1 << 0; //Enable the DMA stream
     SCB_InvalidateDCache_by_Addr(Buffer3Add, ADC3Size*2);  //Invalidate the cache
 }
 
 void recaptureInterleavedValues() {
     ADC1_Start(); //Start the ADC
-    //Clear the transfer flags
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF5);
+
+    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTCIF5);  //Clear the transfer flags
+    
     DMA1_Stream5->CR |= 1 << 0; //Enable the DMA stream
     
     SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC12Size*2);  //Invalidate the cache
@@ -176,11 +176,9 @@ void recaptureInterleavedValues() {
 
 void recaptureSimultaneousValues() {
     ADC1_Start(); //Start the ADC
-    //Clear the transfer flags
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF5);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF6);
-    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CTCIF6);
+
+    SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTCIF5 | DMA_HIFCR_CHTIF6 | DMA_HIFCR_CTCIF6);  //Clear the transfer flags
+    
     DMA1_Stream5->CR |= 1 << 0; //Enable the DMA stream
     DMA1_Stream6->CR |= 1 << 0; //Enable the DMA stream
     
