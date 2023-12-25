@@ -93,8 +93,6 @@ void ADCInitialize(ADC_TypeDef * ADC, int AdcChannel, int Resolution, bool Diffe
   ADC->CFGR2 += 65536 * Samplenum; //Set number of samples
 
 
-
-
   ADC->PCSEL = 0xFFFFF; //Enable all channels
 
   ADC->SQR1 = 64 * AdcChannel;   //Select channel
@@ -117,19 +115,19 @@ void ADCInitialize(ADC_TypeDef * ADC, int AdcChannel, int Resolution, bool Diffe
 
 
 void ADC1_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
-    ADCInitialize(ADC1, AdcChannel, Resolution, Differential, SampleTime, Samplenum);
+    ADCInitialize(ADC1, ADC1PinRemap(AdcChannel), Resolution, Differential, SampleTime, Samplenum);
     ADC1Initialized = 1;
 }
 
 
 void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
-    ADCInitialize(ADC2, AdcChannel, Resolution, Differential, SampleTime, Samplenum);
+    ADCInitialize(ADC2, ADC2PinRemap(AdcChannel), Resolution, Differential, SampleTime, Samplenum);
     ADC2Initialized = 1;
 }
 
 
 void ADC3_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum) {
-    ADCInitialize(ADC3, AdcChannel, Resolution, Differential, SampleTime, Samplenum);
+    ADCInitialize(ADC3, ADC3PinRemap(AdcChannel), Resolution, Differential, SampleTime, Samplenum);
     ADC3Initialized = 1;
 }
 
