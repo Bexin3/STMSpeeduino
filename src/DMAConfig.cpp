@@ -20,7 +20,6 @@ void captureADC1values(int Size, uint16_t* BufferAddress) {
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
     SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     ConfigDMA1_S5(Size, 0x40022040, BufferAddress, 1, 9); //Configure the relevant DMA stream as required
-    ADC1_Start();
 } 
 
 void captureADC2values(int Size, uint16_t* BufferAddress) {
@@ -30,7 +29,6 @@ void captureADC2values(int Size, uint16_t* BufferAddress) {
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
     SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     ConfigDMA1_S6(Size, 0x40022140, BufferAddress, 1, 10); //Configure the relevant DMA stream as required
-    ADC2_Start(); //Start the ADC
 }
 void captureADC3values(int Size, uint16_t* BufferAddress) {
     ADC3_Stop(); //Stop ADC
@@ -39,7 +37,6 @@ void captureADC3values(int Size, uint16_t* BufferAddress) {
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
     SET_BIT(ADC3->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     ConfigDMA1_S7(Size, 0x58026040, BufferAddress, 1, 115); //Configure the relevant DMA stream as required
-    ADC3_Start(); //Start the ADC
 }
 
 void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
@@ -52,8 +49,6 @@ void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
     SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     SET_BIT(ADC12_COMMON->CCR, ADC_CCR_DAMDF_1); //Sets DMA for double ADC mode
     ConfigDMA1_S5(Size/2, 0x4002230C, BufferAddress, 2, 9); //Configure the relevant DMA stream as required
-    ADC1_Start(); //Start the ADC
-    ADC2_Start(); //Start the ADC
 }
 
 void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address) {
@@ -68,9 +63,6 @@ void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buf
     SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     ConfigDMA1_S5(Size, 0x40022040, Buffer1Address, 1, 9); //Configure the relevant DMA stream as required
     ConfigDMA1_S6(Size, 0x40022140, Buffer2Address, 1, 10); //Configure the relevant DMA stream as required
-    ADC1_Start(); //Start the ADC
-    ADC2_Start(); //Start the ADC
-
 }
 
 
@@ -139,7 +131,6 @@ void ConfigDMA1_S7(uint16_t Size, int InAddress, uint16_t* OutAddress, int Trans
 
 
 void recaptureADC1values() {
-    ADC1_Start(); //Start the ADC
     
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTCIF5);  //Clear the transfer flags
     
@@ -147,7 +138,6 @@ void recaptureADC1values() {
     SCB_InvalidateDCache_by_Addr(Buffer1Add, ADC1Size*2);
 }
 void recaptureADC2values() {
-    ADC2_Start(); //Start the ADC
 
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF6 | DMA_HIFCR_CTCIF6);  //Clear the transfer flags
     
@@ -156,7 +146,6 @@ void recaptureADC2values() {
 }
 
 void recaptureADC3values() {
-    ADC3_Start(); //Start the ADC
 
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF7 | DMA_HIFCR_CTCIF7);  //Clear the transfer flags
     
@@ -165,7 +154,6 @@ void recaptureADC3values() {
 }
 
 void recaptureInterleavedValues() {
-    ADC1_Start(); //Start the ADC
 
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTCIF5);  //Clear the transfer flags
     
@@ -175,7 +163,6 @@ void recaptureInterleavedValues() {
 }
 
 void recaptureSimultaneousValues() {
-    ADC1_Start(); //Start the ADC
 
     SET_BIT(DMA1->HIFCR, DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTCIF5 | DMA_HIFCR_CHTIF6 | DMA_HIFCR_CTCIF6);  //Clear the transfer flags
     
