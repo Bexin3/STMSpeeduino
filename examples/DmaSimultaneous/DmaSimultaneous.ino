@@ -13,7 +13,7 @@ SDRAM.begin();
 ADCSimultaneous(); //Begin ADCs in simultaneous mode
 
 captureSimultaneousValues(ValuesToBuffer, FrameBuffer1, FrameBuffer2);
-  
+ADC1_Start();
 }
 
 void loop() {
@@ -32,6 +32,6 @@ Serial.println(FrameBuffer2[i]);
 };
 
 recaptureSimultaneousValues(); //Start the capture again
-
+ADC1_Start();
 
 }
