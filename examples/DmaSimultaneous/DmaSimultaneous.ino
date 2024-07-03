@@ -1,15 +1,14 @@
 #include "STMSpeeduino.h"
-#include "SDRAM.h" //So values can be stored in SDRAM
+
 
 const uint16_t ValuesToBuffer = 100;
-uint16_t *FrameBuffer1 = (uint16_t *) 0x60000000;
-uint16_t *FrameBuffer2 = (uint16_t *) 0x600F0000; 
+uint16_t FrameBuffer1[ValuesToBuffer];
 
 
 
 void setup() {
 
-SDRAM.begin();
+
 ADCSimultaneous(); //Begin ADCs in simultaneous mode
 
 captureSimultaneousValues(ValuesToBuffer, FrameBuffer1, FrameBuffer2);
