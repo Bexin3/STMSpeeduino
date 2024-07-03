@@ -514,10 +514,7 @@ dividor = 128;
     if (FracMultiplier>8192) {
         FracMultiplier = 8192;
     };
-    if (FracMultiplier==0) {
-        FracMultiplier = 1;
-    };
-    if (FracMultiplier>1) {
+    if (FracMultiplier>0) {
         SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLL2FRACEN);
     };
     
