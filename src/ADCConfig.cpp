@@ -522,7 +522,7 @@ dividor = 128;
     //See how Rounding affected the frequency, move the ceil part before
 
   //Set generator speed, remain in 150-300mhz range as long as possible
-  
+  SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLL2VCOSEL);
   RCC->PLL2DIVR = 0x01010000;  //Sets the generator speed
   RCC->PLL2DIVR += dividor*512-512; //Calculation
   RCC->PLL2DIVR += multiplier-1;  //Sets the generator speed
