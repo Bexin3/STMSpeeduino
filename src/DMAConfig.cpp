@@ -18,7 +18,6 @@ void captureADC1values(int Size, uint16_t* BufferAddress) {
     ADC1Size = Size; //Write down the ADC Size
     Buffer1Add = BufferAddress; //Write down the buffer address
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
-    SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_1); //Set ADC to generate DMA requests
     SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     ConfigDMA1_S5(Size, 0x40022040, BufferAddress, 1, 9); //Configure the relevant DMA stream as required
     ADC1_Start();
@@ -49,8 +48,8 @@ void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
     ADC12Size = Size; //Write down the ADC Size
     Buffer1Add = BufferAddress; //Write down the buffer address
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
-    SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_1); //Set ADC to generate DMA requests
-    SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_1); //Set ADC to generate DMA requests
+    SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
+    SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     SET_BIT(ADC12_COMMON->CCR, ADC_CCR_DAMDF_1); //Sets DMA for double ADC mode
     ConfigDMA1_S5(Size/2, 0x4002230C, BufferAddress, 2, 9); //Configure the relevant DMA stream as required
     ADC1_Start(); //Start the ADC
@@ -65,8 +64,6 @@ void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buf
     ADC12Size = Size; //Write down the ADC Size
     SCB_InvalidateDCache_by_Addr(Buffer1Address, Size*2); //Invalidate the cache so new values get read
     SCB_InvalidateDCache_by_Addr(Buffer2Address, Size*2); //Invalidate the cache so new values get read
-    SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_1); //Set ADC to generate DMA requests
-    SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_1); //Set ADC to generate DMA requests
     SET_BIT(ADC1->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     SET_BIT(ADC2->CFGR, ADC_CFGR_DMNGT_0); //Set ADC to generate DMA requests
     ConfigDMA1_S5(Size, 0x40022040, Buffer1Address, 1, 9); //Configure the relevant DMA stream as required
