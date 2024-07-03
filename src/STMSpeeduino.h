@@ -40,6 +40,7 @@ void ADC2ChangeChannel(int AdcChannel);
 void ADC1ChangeChannel(int AdcChannel);
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
+double GetADCFrequency();
 
 int FastAnalogRead(int Pin);
 

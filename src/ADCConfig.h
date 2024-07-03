@@ -35,6 +35,7 @@ void ADC2EN();
 void ADC3EN();
 void ADCSimultaneousConfig();
 void ADCInterleavedConfig(int Resolution);
+double GetADCFrequency();
 
 int ADC1InjectedRead(int ADCChannel);
 int ADC2InjectedRead(int ADCChannel);

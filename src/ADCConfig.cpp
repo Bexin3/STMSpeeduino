@@ -7,6 +7,7 @@ bool ADC2Initialized = 0; //Stores information on if ADC2 is Initialized
 bool ADC3Initialized = 0; //Stores information on if ADC3 is Initialized
 int Prescaler = 0; //Stores the Calculated Prescaler value
 bool ClockInitialized = 0; //Stores if clock is initialized
+double ActualFrequency = 0;
 
 void ADCInterleaved(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ) {
 
@@ -175,6 +176,7 @@ void ADC2_Init(int AdcChannel, int Resolution, bool Differential, int SampleTime
 
   ADC2->SMPR1 = SampleTime * 153391689;  //Divide
   ADC2->SMPR2 = SampleTime * 153391689;  //Divide
+
 
 
 
@@ -445,14 +447,15 @@ void Resolution3Set(int Resolution) {
 void SystemCLCKInit(double ClockSpeedMHZ) {
 
 #if defined(ARDUINO_GIGA)
-  RCC->PLLCKSELR = 0x0200F022; //Divide 16mhz clock to 1
+  RCC->PLLCKSELR = 0x02010022; //Divide 16mhz clock to 1
 #elif defined(STM32H747xx)
-  RCC->PLLCKSELR = 0x02017022; //Divide 24mhz clock to 1
+  RCC->PLLCKSELR = 0x02018022; //Divide 24mhz clock to 1
 #else
   #error Unsupported microcontroller, this library currently only works for STM32H747 based arduino boards.
 #endif
 int AdcPrescDivision = 1; //How much does clock get divided
 ClockSpeedMHZ *= 2; //ADC always further divides clockspeed by 2, compensate
+
 
 //Calculate proper prescaler if needed
 
@@ -493,16 +496,40 @@ Prescaler = 1;
 
   //Calculate dividor to use
 
+
   int dividor = ceil(150.0f / ClockSpeedMHZ / AdcPrescDivision);
   if (dividor>128) {
 dividor = 128;
   };
+    
+    int multiplier = floor(ClockSpeedMHZ*dividor*AdcPrescDivision);
+    if (multiplier>512) {
+        multiplier = 512;
+    };
+    if (multiplier==0) {
+        multiplier = 1;
+    };
+    int FracMultiplier = floor(8192*(ClockSpeedMHZ*dividor*AdcPrescDivision-floor(ClockSpeedMHZ*dividor*AdcPrescDivision)));
+    
+    if (FracMultiplier>8192) {
+        FracMultiplier = 8192;
+    };
+    if (FracMultiplier==0) {
+        FracMultiplier = 1;
+    };
+    if (FracMultiplier>1) {
+        SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLL2FRACEN);
+    };
+    
+    ActualFrequency = (multiplier+double(FracMultiplier)/8192)/AdcPrescDivision/dividor/2;
+    //See how Rounding affected the frequency, move the ceil part before
 
   //Set generator speed, remain in 150-300mhz range as long as possible
   
   RCC->PLL2DIVR = 0x01010000;  //Sets the generator speed
   RCC->PLL2DIVR += dividor*512-512; //Calculation
-  RCC->PLL2DIVR += ceil(ClockSpeedMHZ*dividor*AdcPrescDivision-4);  //Sets the generator speed
+  RCC->PLL2DIVR += multiplier-1;  //Sets the generator speed
+  RCC->PLL2FRACR = 8*FracMultiplier-8;
 
   SET_BIT(RCC->CR, RCC_CR_PLL2ON); //Enable generator
   SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_DIVP2EN);  //Enable output
@@ -658,4 +685,8 @@ int ADC3InjectedRead(int ADCChannel) {
     SET_BIT(ADC3->CR, ADC_CR_JADSTART); //Start the conversion
     while (!READ_REG(ADC3->ISR & ADC_ISR_JEOC) && (micros() < (0xFFF + InitMicros))) {}; //Wait for a new value if the latest one was already read
     return(READ_REG(ADC3->JDR1)); //Return the new value
+}
+
+double GetADCFrequency() {
+    return(ActualFrequency);
 }
