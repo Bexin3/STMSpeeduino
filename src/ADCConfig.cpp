@@ -503,8 +503,8 @@ dividor = 128;
   };
     
     int multiplier = floor(ClockSpeedMHZ*dividor*AdcPrescDivision);
-    if (multiplier>512) {
-        multiplier = 512;
+    if (multiplier<4) {
+        multiplier = 4;
     };
     if (multiplier==0) {
         multiplier = 1;
