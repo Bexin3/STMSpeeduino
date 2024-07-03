@@ -3,7 +3,7 @@
 
 const uint16_t ValuesToBuffer = 100;
 uint16_t FrameBuffer1[ValuesToBuffer];
-
+uint16_t FrameBuffer2[ValuesToBuffer];
 
 
 void setup() {
