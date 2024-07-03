@@ -498,9 +498,13 @@ Prescaler = 1;
 
 
   int dividor = ceil(150.0f / ClockSpeedMHZ / AdcPrescDivision);
-  if (dividor>128) {
-dividor = 128;
-  };
+    if (dividor>128) {
+      dividor = 128;
+    };
+    if (dividor<1) {
+      dividor = 1;
+    };
+      
     
     int multiplier = floor(ClockSpeedMHZ*dividor*AdcPrescDivision);
     if (multiplier>512) {
@@ -513,6 +517,9 @@ dividor = 128;
     
     if (FracMultiplier>8192) {
         FracMultiplier = 8192;
+    };
+    if (FracMultiplier<0) {
+        FracMultiplier = 0;
     };
     if (FracMultiplier>0) {
         SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLL2FRACEN);
