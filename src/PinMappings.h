@@ -3,9 +3,8 @@
 
 #include <Arduino.h>
 
-int ADC1PinRemap(int Pin);
-int ADC2PinRemap(int Pin);
-int ADC3PinRemap(int Pin);
+int ADCPinRemap(ADC_TypeDef * ADC, int Pin);
+
 
 /*
 int A0 = 4;

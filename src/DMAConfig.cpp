@@ -14,7 +14,7 @@ uint16_t* Buffer3Add; //Address for the buffer
 
 
 void captureADC1values(int Size, uint16_t* BufferAddress) {
-    ADC1_Stop(); //Stop ADC
+    ADC_Stop(ADC1); //Stop ADC
     ADC1Size = Size; //Write down the ADC Size
     Buffer1Add = BufferAddress; //Write down the buffer address
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
@@ -23,7 +23,7 @@ void captureADC1values(int Size, uint16_t* BufferAddress) {
 } 
 
 void captureADC2values(int Size, uint16_t* BufferAddress) {
-    ADC2_Stop(); //Stop ADC
+   ADC_Stop(ADC2); //Stop ADC
     ADC2Size = Size; //Write down the ADC Size
     Buffer2Add = BufferAddress; //Write down the buffer address
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
@@ -31,7 +31,7 @@ void captureADC2values(int Size, uint16_t* BufferAddress) {
     ConfigDMA1_S6(Size, 0x40022140, BufferAddress, 1, 10); //Configure the relevant DMA stream as required
 }
 void captureADC3values(int Size, uint16_t* BufferAddress) {
-    ADC3_Stop(); //Stop ADC
+    ADC_Stop(ADC3); //Stop ADC
     ADC3Size = Size; //Write down the ADC Size
     Buffer3Add = BufferAddress; //Write down the buffer address
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
@@ -40,8 +40,8 @@ void captureADC3values(int Size, uint16_t* BufferAddress) {
 }
 
 void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
-    ADC1_Stop(); //Stop ADC
-    ADC2_Stop(); //Stop ADC
+    ADC_Stop(ADC1); //Stop ADC
+    ADC_Stop(ADC2); //Stop ADC
     ADC12Size = Size; //Write down the ADC Size
     Buffer1Add = BufferAddress; //Write down the buffer address
     SCB_InvalidateDCache_by_Addr(BufferAddress, Size*2); //Invalidate the cache so new values get read
@@ -52,8 +52,8 @@ void captureInterleavedValues(int Size, uint16_t* BufferAddress) {
 }
 
 void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address) {
-    ADC1_Stop(); //Stop ADC
-    ADC2_Stop(); //Stop ADC
+    ADC_Stop(ADC1); //Stop ADC
+    ADC_Stop(ADC2); //Stop ADC
     Buffer1Add = Buffer1Address; //Write down the buffer address
     Buffer2Add = Buffer2Address; //Write down the buffer address
     ADC12Size = Size; //Write down the ADC Size
