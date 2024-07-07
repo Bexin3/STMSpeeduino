@@ -52,7 +52,7 @@ void recaptureADCvalues(ADC_DMAS ADC_DMA) {
 
 
 bool TransferADCComplete(ADC_DMAS ADC_DMA) {
-return(READ_BIT(DMA1->HISR, ADC_DMA.AttachedStream.DMA_TCI)); //Check if transfer is complete
+return(READ_BIT(DMA1->HISR, ADC_DMA.AttachedStream.DMA_TC)); //Check if transfer is complete
 }
 
 
