@@ -1,5 +1,8 @@
 #include "Opamp.h"
 
+#if defined(ARDUINO_PORTENTA_H7_M7)
+#pragma message "There are no OPAMP pins abailable on the portenta"
+#endif
 
 void OPAMPCFG(int Gain) {
 
