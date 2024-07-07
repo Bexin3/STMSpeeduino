@@ -8,7 +8,7 @@ struct DMAStreamData {
     DMAMUX_Channel_TypeDef * DMAMuxCh;
     long unsigned int DMA_CHT;
     long unsigned int DMA_CTC;
-    long unsigned int DMA_TCI;
+    long unsigned int DMA_TC; //Transfer complete flag
 };
 
 struct ADC_DMAS {
