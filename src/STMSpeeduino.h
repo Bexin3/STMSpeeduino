@@ -34,29 +34,14 @@ void ADCInterleaved_Start(int Resolution);
 
 double GetADCFrequency();
 
-
 int FastAnalogRead(int Pin);
 
 void OPAMPCFG(int Gain);
 
-void captureADC1values(int Size, uint16_t* BufferAddress);
-void captureADC2values(int Size, uint16_t* BufferAddress);
-void captureADC3values(int Size, uint16_t* BufferAddress);
-void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address);
-void captureInterleavedValues(int Size, uint16_t* BufferAddress);
-
-void recaptureADC1values();
-void recaptureADC2values();
-void recaptureADC3values();
-void recaptureInterleavedValues();
-void recaptureSimultaneousValues();
-
-bool TransferADC1Complete();
-bool TransferADC2Complete();
-bool TransferADC3Complete();
-bool TransferInterleavedComplete();
-bool TransferSimultaneousComplete();
-
+void AttachADC_DMA(ADC_DMAS& ADC_DMA, uint16_t Size, uint16_t* BufferAddress, DMAStreamData DMAStream);
+void recaptureADCvalues(ADC_DMAS ADC_DMA);
+bool TransferADCComplete(ADC_DMAS ADC_DMA);
+void UnattachDMA(ADC_DMAS ADC_DMA);
 
 
 #endif

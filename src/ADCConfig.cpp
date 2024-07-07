@@ -235,8 +235,6 @@ if (ClockSpeedMHZ>50) {
 
 
 
-
-
 int CatchADCValue(ADC_TypeDef * ADC, uint32_t Timeout) {
     uint32_t InitMicros = micros(); //Capture current time
     while (!READ_REG(ADC->ISR & ADC_ISR_EOC) && (micros() < (InitMicros + Timeout))) {}; //Wait for a new value if the latest one was already read

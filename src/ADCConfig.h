@@ -6,7 +6,7 @@
 
 void ADCInterleaved(int ADCChannel = A0, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40);
 void ADCSimultaneous(int ADC1Channel = A0, int ADC2Channel = A1, int Resolution = 16, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
-void ADCBegin(ADC_TypeDef * ADC, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
+void ADCBegin(ADC_TypeDef * ADC, int ADCChannel = A0, int Resolution = 16, bool Differential = 0, double ClockSpeedMHZ = 40, int SampleTime = 0, int Samplenum = 0);
 void ADCInitialize(ADC_TypeDef * ADC, int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum);
 void ADC_Init(ADC_TypeDef * ADC, int AdcChannel, int Resolution, bool Differential, int SampleTime, int Samplenum);
 void ADCEN(ADC_TypeDef * ADC);
