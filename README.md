@@ -24,17 +24,17 @@ ADCInterleaved - Starts both adc so they meassure one channel, in which they tak
 
 ADCSimultaneous - Starts both ADCs so they read two different channels exactly in phase
 
-ADC1/2/3 Begin - Start one of the ADCs
+ADCBegin - Start one of the ADCs
 
-ADC1/2/3 Start- Starts one of the ADCs
+ADCStart- Starts one of the ADCs
 
-ADC1/2/3 Stop - Stops one of the ADCs
+ADCStop - Stops one of the ADCs
 
-ADC1/2/3ChangeChannel - Changes an ADC channel
+ADCChangeChannel - Changes an ADC channel
 
 FastAnalogRead - quickly read the channel with a relevant ADC
 
-CatchADC1/2/3 Value - writes down the ADC value from latest conversion, and if it was already read, waits for next conversion to happen
+CatchADCValue - writes down the ADC value from latest conversion, and if it was already read, waits for next conversion to happen
 
 OPAMPCFG - starts the operational amplifier, only supported when using Giga R1 Wifi.
 
@@ -42,17 +42,15 @@ OPAMPCFG - starts the operational amplifier, only supported when using Giga R1 W
 DMA Functions; (Adcs have to be initiated, using the ones starting or restarting transfer will lead to the ADC being stopped after) 
 
 
-captureADC1/2/3values - Store a defined ammount of values into a buffer
+captureADCvalues - Store a defined ammount of values into a buffer
 
 captureSimultaneousValues - Store a defined ammount of values into two buffers one for each ADC
 
 captureInterleavedValues - Store a defined ammount of values into a buffer using two ADCs 
 
-recaptureADC1/2/3values - Store values again using last settings
+recaptureADCvalues - Store values again using last settings
 
-recaptureInterleaved/SimultaneousValues - Store values again using last settings
-
-TransferADC1/2/3/Interleaved/SimultaneousComplete - Checks if DMA transfer is complete
+TransferADCComplete - Checks if DMA transfer is complete
 
 
 Due to caching if you read buffer value while the program is running you may have to invalidate it
