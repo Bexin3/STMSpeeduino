@@ -3,6 +3,6 @@
 
 #include <Arduino.h>
 
-int ADCPinRemap(ADC_TypeDef * ADC, int Pin);
+int ADCPinRemap(ADC_TypeDef* ADC, int Pin);
 
 #endif
