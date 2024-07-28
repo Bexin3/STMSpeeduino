@@ -14,11 +14,11 @@ void setup() {
   // put your setup code here, to run once:
 Serial.begin(9600);
 OPAMPCFG(Gain);
-ADC1Begin(A0, Resolution, Differential, ClockSpeed, SampleTime, Samplenum);
+ADCBegin(ADC1, A0, Resolution, Differential, ClockSpeed, SampleTime, Samplenum);
 
 }
 
 void loop() {
 Serial.print("ADC1 value: ");
-Serial.println(CatchADC1Value());
+Serial.println(CatchADCValue(ADC1));
 }

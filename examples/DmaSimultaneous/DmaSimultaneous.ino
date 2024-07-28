@@ -12,13 +12,14 @@ void setup() {
 SDRAM.begin();
 ADCSimultaneous(); //Begin ADCs in simultaneous mode
 
-captureSimultaneousValues(ValuesToBuffer, FrameBuffer1, FrameBuffer2);
-ADC1_Start();
+AttachADC_DMA(ADC1DMA, ValuesToBuffer, FrameBuffer1, DMAS5);
+AttachADC_DMA(ADC2DMA, ValuesToBuffer, FrameBuffer2, DMAS6);
+ADC_Start(ADC1);
 }
 
 void loop() {
 //Write out the values
-while(!TransferSimultaneousComplete()) {}; //Wait for the transfer to be complete
+while(!TransferADCComplete(ADC1DMA) || !TransferADCComplete(ADC2DMA)) {}; //Wait for the transfer to be complete
 for (int i = 0; i < ValuesToBuffer; i++) {
 Serial.print("ADC1 value ");
 Serial.print(i);
@@ -31,7 +32,8 @@ Serial.println(FrameBuffer2[i]);
 
 };
 
-recaptureSimultaneousValues(); //Start the capture again
-ADC1_Start();
+recaptureADCvalues(ADC2DMA); //Start the capture again
+recaptureADCvalues(ADC1DMA); //Start the capture again
+ADC_Start(ADC1);
 
 }

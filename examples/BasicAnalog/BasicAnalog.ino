@@ -13,10 +13,10 @@ int Samplenum = 0; //Number of samples, is 1 more, 0 to 1023
 void setup() {
   // put your setup code here, to run once:
 Serial.begin(9600);
-ADC1Begin(Channel, Resolution, Differential, ClockSpeed, SampleTime, Samplenum);
+ADCBegin(ADC1, Channel, Resolution, Differential, ClockSpeed, SampleTime, Samplenum);
 }
 
 void loop() {
 Serial.print("ADC1 value: ");
-Serial.println(CatchADC1Value());
+Serial.println(CatchADCValue(ADC1));
 }

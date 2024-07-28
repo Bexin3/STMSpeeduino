@@ -17,7 +17,7 @@ ADCInterleaved();
 
 void loop() {
 Serial.print("ADC value: ");
-Serial.println(CatchADC1Value());
+Serial.println(CatchADCValue(ADC1));
 Serial.print("ADC value: ");
-Serial.println(CatchADC2Value());
+Serial.println(CatchADCValue(ADC2));
 }
