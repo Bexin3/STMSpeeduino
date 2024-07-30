@@ -33,8 +33,6 @@ void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
 double GetADCFrequency();
 
-double GetADCFrequency();
-
 int FastAnalogRead(int Pin, uint32_t Timeout);
 
 void OPAMPCFG(int Gain);
