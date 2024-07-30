@@ -2,18 +2,17 @@
 #include "SDRAM.h" //So values can be stored in SDRAM
 
 const uint16_t ValuesToBuffer = 100;
-uint16_t *FrameBuffer1 = (uint16_t *) 0x60000000;
-uint16_t *FrameBuffer2 = (uint16_t *) 0x600F0000; 
+uint16_t FrameBuffer1[ValuesToBuffer];
+uint16_t FrameBuffer2[ValuesToBuffer]; 
 
 
 
 void setup() {
 
-SDRAM.begin();
 ADCSimultaneous(); //Begin ADCs in simultaneous mode
 
-AttachADC_DMA(ADC1DMA, ValuesToBuffer, FrameBuffer1, DMAS5);
-AttachADC_DMA(ADC2DMA, ValuesToBuffer, FrameBuffer2, DMAS6);
+AttachADC_DMA(ADC1DMA, ValuesToBuffer, (uint16_t *) FrameBuffer1, DMAS5);
+AttachADC_DMA(ADC2DMA, ValuesToBuffer, (uint16_t *) FrameBuffer2, DMAS6);
 ADC_Start(ADC1);
 }
 
