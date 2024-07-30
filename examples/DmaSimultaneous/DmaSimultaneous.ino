@@ -1,5 +1,4 @@
 #include "STMSpeeduino.h"
-#include "SDRAM.h" //So values can be stored in SDRAM
 
 const uint16_t ValuesToBuffer = 100;
 uint16_t FrameBuffer1[ValuesToBuffer];
