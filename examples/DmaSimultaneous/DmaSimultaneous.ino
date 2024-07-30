@@ -1,12 +1,18 @@
 #include "STMSpeeduino.h"
 
+
 const uint16_t ValuesToBuffer = 100;
 uint16_t FrameBuffer1[ValuesToBuffer];
 uint16_t FrameBuffer2[ValuesToBuffer]; 
 
 
+const uint16_t ValuesToBuffer = 100;
+uint16_t FrameBuffer1[ValuesToBuffer];
+uint16_t FrameBuffer2[ValuesToBuffer];
+
 
 void setup() {
+
 
 ADCSimultaneous(); //Begin ADCs in simultaneous mode
 

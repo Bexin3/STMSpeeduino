@@ -2,6 +2,7 @@
 #include "ADCConfig.h"
 #include "PinMappings.h"
 
+
 ADC_TypeDef* ADCList[3] = { ADC1, ADC2, ADC3 };  //Stores information on if ADC1 is Initialized
 bool ADCInitialized[3] = { 0, 0, 0 };            //Stores information on if ADC1 is Initialized
 int Prescaler = 0;                               //Stores the Calculated Prescaler value
@@ -17,6 +18,7 @@ int GetADCNumber(ADC_TypeDef* ADC) {
     return (2);
   };
 }
+
 
 void ADCInterleaved(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ) {
 
@@ -116,7 +118,9 @@ void ADCEN(ADC_TypeDef* ADC) {
   } else {
     ADC12_COMMON->CCR |= Prescaler << 18;  //Set Prescaler value
   };
+
   SET_BIT(ADC->CR, ADC_CR_ADEN_Msk);  //Enable
+
 }
 
 
@@ -192,21 +196,27 @@ void SystemCLCKInit(double ClockSpeedMHZ) {
 
   constrain(multiplier, 4, 512);
 
+
   int FracMultiplier = floor(8192 * (ClockSpeedMHZ * dividor * AdcPrescDivision[Prescaler] - floor(ClockSpeedMHZ * dividor * AdcPrescDivision[Prescaler])));
 
+
   constrain(FracMultiplier, 0, 8192);
+
 
   if (FracMultiplier != 0) {
     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLL2FRACEN);
   };
+
 
   ActualFrequency = (multiplier + double(FracMultiplier) / 8192) / AdcPrescDivision[Prescaler] / dividor / 2;
   //See how Rounding affected the frequency, move the ceil part before
 
   //Set generator speed, remain in 150-300mhz range as long as possible
   SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLL2VCOSEL);
+
   RCC->PLL2DIVR = 0x100FDFF + dividor * 512 + multiplier;  //Sets the generator speed
   RCC->PLL2FRACR = 8 * FracMultiplier - 8;
+
 
   SET_BIT(RCC->CR, RCC_CR_PLL2ON);             //Enable generator
   SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_DIVP2EN);  //Enable output
@@ -259,4 +269,3 @@ double GetADCFrequency() {
   return (ActualFrequency);
 }
 
-//Checkmicros time taken if its worth using

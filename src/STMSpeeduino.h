@@ -31,6 +31,7 @@ void ADCChangeChannel(ADC_TypeDef * ADC, int AdcChannel);
 
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
+double GetADCFrequency();
 
 double GetADCFrequency();
 
