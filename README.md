@@ -55,3 +55,4 @@ TransferADCComplete - Checks if DMA transfer is complete
 
 Due to caching if you read buffer value while the program is running you may have to invalidate it
 DMA can transfer up to 65535 values.
+Using SDRAM using the default library will take away the control of clock speeds from the user as the clock will now be set up for it instead of for the ADC
