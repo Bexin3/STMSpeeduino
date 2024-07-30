@@ -32,6 +32,5 @@ Serial.println(FrameBuffer2[i]);
 
 recaptureADCvalues(ADC2DMA); //Start the capture again
 recaptureADCvalues(ADC1DMA); //Start the capture again
-ADC_Start(ADC1);
 
 }
