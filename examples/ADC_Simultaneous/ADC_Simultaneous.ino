@@ -19,8 +19,8 @@ ADCSimultaneous(ADC1Channel, ADC2Channel, Resolution, ClockSpeed, SampleTime, Sa
 }
 
 void loop() {
-Val1 = CatchADC1Value();
-Val2 = CatchADC2Value();
+Val1 = CatchADCValue(ADC1);
+Val2 = CatchADCValue(ADC2);
 Serial.print("ADC1 value: ");
 Serial.println(Val1);
 Serial.print("ADC2 value: ");

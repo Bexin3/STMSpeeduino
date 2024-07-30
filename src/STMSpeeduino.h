@@ -9,7 +9,6 @@
 #define A8 102
 #define A9 103
 #elif defined(ARDUINO_PORTENTA_H7)
-
 #endif
 
 #include <Arduino.h>
@@ -20,50 +19,30 @@
 
 void ADCInterleaved(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ);
 void ADCSimultaneous(int ADC1Channel, int ADC2Channel, int Resolution, double ClockSpeedMHZ, int SampleTime, int Samplenum);
-void ADC1Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
-void ADC2Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
-void ADC3Begin(int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
+void ADCBegin(ADC_TypeDef * ADC, int ADCChannel, int Resolution, bool Differential, double ClockSpeedMHZ, int SampleTime, int Samplenum);
 
-int CatchADC1Value(uint32_t Timeout);
-int CatchADC2Value(uint32_t Timeout);
-int CatchADC3Value(uint32_t Timeout);
+int CatchADCValue(ADC_TypeDef * ADC, uint32_t Timeout);
 
 void SystemCLCKInit(double ClockSpeedMHZ);
-void ADC3_Start();
-void ADC2_Start();
-void ADC1_Start();
-void ADC3_Stop();
-void ADC2_Stop();
-void ADC1_Stop();
-void ADC3ChangeChannel(int AdcChannel);
-void ADC2ChangeChannel(int AdcChannel);
-void ADC1ChangeChannel(int AdcChannel);
+
+void ADC_Start(ADC_TypeDef * ADC);
+void ADC_Stop(ADC_TypeDef * ADC);
+void ADCChangeChannel(ADC_TypeDef * ADC, int AdcChannel);
+
 void ADCSimultaneous_Start();
 void ADCInterleaved_Start(int Resolution);
 double GetADCFrequency();
 
-int FastAnalogRead(int Pin);
+double GetADCFrequency();
+
+int FastAnalogRead(int Pin, uint32_t Timeout);
 
 void OPAMPCFG(int Gain);
 
-void captureADC1values(int Size, uint16_t* BufferAddress);
-void captureADC2values(int Size, uint16_t* BufferAddress);
-void captureADC3values(int Size, uint16_t* BufferAddress);
-void captureSimultaneousValues(int Size, uint16_t* Buffer1Address, uint16_t* Buffer2Address);
-void captureInterleavedValues(int Size, uint16_t* BufferAddress);
-
-void recaptureADC1values();
-void recaptureADC2values();
-void recaptureADC3values();
-void recaptureInterleavedValues();
-void recaptureSimultaneousValues();
-
-bool TransferADC1Complete();
-bool TransferADC2Complete();
-bool TransferADC3Complete();
-bool TransferInterleavedComplete();
-bool TransferSimultaneousComplete();
-
+void AttachADC_DMA(ADC_DMAS& ADC_DMA, uint16_t Size, uint16_t* BufferAddress, DMAStreamData DMAStream);
+void recaptureADCvalues(ADC_DMAS ADC_DMA);
+bool TransferADCComplete(ADC_DMAS ADC_DMA);
+void UnattachDMA(ADC_DMAS ADC_DMA);
 
 
 #endif
