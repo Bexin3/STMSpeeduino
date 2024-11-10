@@ -190,17 +190,17 @@ void SystemCLCKInit(double ClockSpeedMHZ) {
 
   int dividor = ceil(150.0f / ClockSpeedMHZ / AdcPrescDivision[Prescaler]);
 
-  constrain(dividor, 1, 128);
+  dividor = constrain(dividor, 1, 128);
 
   int multiplier = floor(ClockSpeedMHZ * dividor * AdcPrescDivision[Prescaler]);
 
-  constrain(multiplier, 4, 512);
+  multiplier = constrain(multiplier, 4, 512);
 
 
   int FracMultiplier = floor(8192 * (ClockSpeedMHZ * dividor * AdcPrescDivision[Prescaler] - floor(ClockSpeedMHZ * dividor * AdcPrescDivision[Prescaler])));
 
 
-  constrain(FracMultiplier, 0, 8192);
+  FracMultiplier = constrain(FracMultiplier, 0, 8192);
 
 
   if (FracMultiplier != 0) {
