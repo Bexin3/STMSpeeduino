@@ -55,4 +55,5 @@ TransferADCComplete - Checks if DMA transfer is complete
 
 Due to caching if you read buffer value while the program is running you may have to invalidate it
 DMA can transfer up to 65535 values.
-Using SDRAM using the default library will take away the control of clock speeds from the user as the clock will now be set up for it instead of for the ADC
+Using SDRAM using the default library will take away the control of clock speeds from the user as the clock will now be set up for it instead of for the ADC, however you can avoid this by running SDRAM from HCLK. I cant guarantee stability on giga as its 240mhz instead of 200 (The SDRAM should however be able to run up to 166mhz and the clock is divided by two, so only 120mhz), though it is working well for me so far. See https://github.com/Bexin3/ArduinoCore-mbed-HCLK-ram/blob/main/libraries/Portenta_SDRAM/src/ram_internal.c
+The only change is to the FMC_SDRAM_Clock_Config struct, and you dont have to recompile anything, if you go into default hardware libraries, changing this file will make it work.
