@@ -155,10 +155,10 @@ void ResolutionSet(ADC_TypeDef* ADC, int Resolution) {
   CLEAR_BIT(ADC->CFGR, ADC_CFGR_RES);
 
   switch (Resolution) {
-    case 8: SET_BIT(ADC->CFGR, ADC_CFGR_RES);
-    case 10: SET_BIT(ADC->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1);
-    case 12: SET_BIT(ADC->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1);
-    case 14: SET_BIT(ADC->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2);
+    case 8: SET_BIT(ADC->CFGR, ADC_CFGR_RES); break;
+    case 10: SET_BIT(ADC->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_1); break;
+    case 12: SET_BIT(ADC->CFGR, ADC_CFGR_RES_2 | ADC_CFGR_RES_1); break;
+    case 14: SET_BIT(ADC->CFGR, ADC_CFGR_RES_0 | ADC_CFGR_RES_2); break;
     default: return;
   };
 }
