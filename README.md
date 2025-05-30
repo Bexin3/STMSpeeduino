@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/612708712.svg)](https://doi.org/10.5281/zenodo.15555644)
+
 Compatible with Giga R1 wifi, Portenta h7 and possibly other stm32h747 boards. You can find the list of supported pins on GIGAR1 in pinmappings.cpp file in src.
 
 As of now this library is still in development, The planned features can be found in Issues.
